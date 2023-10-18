@@ -1,6 +1,5 @@
 import requests
 
-
 from dotenv import dotenv_values
 
 # Get API key from .env file and store in dict for easy debugging and use
@@ -8,12 +7,11 @@ from dotenv import dotenv_values
 dotenv_file = "./.azure.env"
 config = dotenv_values(dotenv_path=dotenv_file)
 
-
 openai_api_key = config["OPENAI_API_KEY"]
 openai_api_base = config["OPENAI_API_BASE"]
 openai_api_version = config["OPENAI_API_VERSION"]
 openai_api_type = config["OPENAI_API_TYPE"]
-openai_api_model_name= config["OPENAI_API_MODEL_NAME"]
+openai_api_model_name = config["OPENAI_API_MODEL_NAME"]
 deployment_name = config["OPENAI_API_DEPLOYMENT_ID"]
 model_name = config["OPENAI_API_EMBEDDING_MODEL_NAME"]
 temperature = config["OPENAI_API_TEMPERATURE"]
@@ -25,7 +23,6 @@ print(f"openai_api_type: {openai_api_type}")
 print(f"deployment_name: {deployment_name}")
 print(f"model_name: {model_name}")
 print(f"temperature: {temperature}")
-
 
 # Define the headers. Notice the difference between OpenAI's original API
 headers = {

@@ -14,7 +14,7 @@ This script is a Python application that uses the Azure AI API to generate chat 
     ```
     pip install requests python-dotenv
     ```
-3. Create a `.env` file in the root directory of the project and add your Azure AI API credentials and settings:
+3. Create a `azure.env` file in the root directory of the project and add your Azure AI API credentials and settings:
     ```
     OPENAI_API_KEY=<your-api-key>
     OPENAI_API_BASE=<api-base-url>
@@ -26,6 +26,20 @@ This script is a Python application that uses the Azure AI API to generate chat 
     OPENAI_API_TEMPERATURE=<temperature>
     ```
 
+4. `.azure.env` example
+
+   ```
+   OPENAI_API_KEY=<your api key>
+   OPENAI_API_TYPE=azure
+   OPENAI_API_BASE=<your azure ai url base>
+   OPENAI_API_DEPLOYMENT_ID=<your deployment id, some people call it deployment name>
+   OPENAI_API_VERSION=2023-05-15
+   OPENAI_API_REGION=<optional>
+   OPENAI_API_MAX_TOKENS=8192
+   OPENAI_API_TEMPERATURE=0.1
+   OPENAI_API_MODEL_NAME=gpt-4
+   ```
+
 ## Usage
 Run the script using Python:
 ```
@@ -33,19 +47,7 @@ python script.py
 ```
 The script will load the settings from the `.azure.env` file, make a POST request to the Azure AI API with a payload containing your prompt and settings, and print the completion result.
 
-## .azure.env example
 
-```bash
-OPENAI_API_KEY=<your api key>
-OPENAI_API_TYPE=azure
-OPENAI_API_BASE=<your azure ai url base>
-OPENAI_API_DEPLOYMENT_ID=<your deployment id, some people call it deployment name>
-OPENAI_API_VERSION=2023-05-15
-OPENAI_API_REGION=<optional>
-OPENAI_API_MAX_TOKENS=8192
-OPENAI_API_TEMPERATURE=0.1
-OPENAI_API_MODEL_NAME=gpt-4
-```
 
 The Azure AI full URL will look like:
 

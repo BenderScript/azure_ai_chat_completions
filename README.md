@@ -1,68 +1,46 @@
-# Azure AI Chat Completion Script README
+# Minimalistic Azure AI Chat Completion 
 
 ## Overview
-This script is a Python application that uses the Azure AI API to generate chat completions. It's a simple example designed to translate English text to French, but can be easily modified for other tasks.
+This is a simple Python application that uses the Azure OpenAI AI API to generate chat completions. 
 
 ## Prerequisites
-- Python 3.6 or higher
-- `requests` library
+- Python 3.11 or higher
+- `openai` library
 - `python-dotenv` library
 
 ## Setup
 1. Clone the repository.
 2. Install the required Python libraries using pip:
     ```
-    pip install requests python-dotenv
+    pip3 install -r requirements.txt
     ```
-3. Create a `azure.env` file in the root directory of the project and add your Azure AI API credentials and settings:
+3. Create a `.env` file in the root directory of the project and add your Azure AI API credentials and settings:
     ```
-    OPENAI_API_KEY=<your-api-key>
-    OPENAI_API_BASE=<api-base-url>
-    OPENAI_API_VERSION=<api-version>
-    OPENAI_API_TYPE=<api-type>
-    OPENAI_API_MODEL_NAME=<model-name>
-    OPENAI_API_DEPLOYMENT_ID=<deployment-id>
-    OPENAI_API_EMBEDDING_MODEL_NAME=<embedding-model-name>
-    OPENAI_API_TEMPERATURE=<temperature>
+   AZURE_OPENAI_API_KEY=your-key
+   AZURE_MODEL_NAME=gpt-4
+   AZURE_OPENAI_ENDPOINT=your URL endpoint
+   AZURE_OPENAI_API_VERSION=<such as 2023-12-01-preview>
+   AZURE_OPENAI_DEPLOYMENT=<your deployment name>
     ```
-
-4. `.azure.env` example
-
-   ```
-   OPENAI_API_KEY=<your api key>
-   OPENAI_API_TYPE=azure
-   OPENAI_API_BASE=<your azure ai url base>
-   OPENAI_API_DEPLOYMENT_ID=<your deployment id, some people call it deployment name>
-   OPENAI_API_VERSION=2023-05-15
-   OPENAI_API_REGION=<optional>
-   OPENAI_API_MAX_TOKENS=8192
-   OPENAI_API_TEMPERATURE=0.1
-   OPENAI_API_MODEL_NAME=gpt-4
-   ```
 
 ## Usage
 Run the script using Python:
 ```
-python script.py
+python main.py
 ```
-The script will load the settings from the `.azure.env` file, make a POST request to the Azure AI API with a payload containing your prompt and settings, and print the completion result.
+The script will load the settings from the `.env` file, make a chat completion request to the Azure OpenAI deployment you specified
 
 
-
-The Azure AI full URL will look like:
+If you are working with pure REST the full URL will look like:
 
 ```bash
 url = openai_api_base + "openai/deployments/" + deployment_name + "/chat/completions?api-version=" + openai_api_version
 ```
 
 ## Customization
-You can customize the script by modifying the `payload` dictionary. For example, you can change the `content` field in the `messages` list to use a different prompt, or adjust the `max_tokens` field to generate longer or shorter completions.
-
+You can customize the script by modifying the `messages` dictionary. 
 ## Troubleshooting
 If you encounter any errors, check the printed error message and status code for clues about what went wrong. Common issues include incorrect API credentials in the `.env` file and network connectivity problems.
 
 ## Contributing
 Contributions are welcome! Please read our contributing guidelines before submitting a pull request.
-
-## License
-This project is licensed under the terms of the MIT license.

@@ -1,51 +1,40 @@
-import requests
+import os
 
-from dotenv import dotenv_values
+import openai
+from dotenv import load_dotenv
+from openai import AzureOpenAI
 
-# Get API key from .env file and store in dict for easy debugging and use
-# Alternatively you can use load_dotenv() and then use os.getenv()
-dotenv_file = "./.azure.env"
-config = dotenv_values(dotenv_path=dotenv_file)
+load_dotenv()
 
-openai_api_key = config["OPENAI_API_KEY"]
-openai_api_base = config["OPENAI_API_BASE"]
-openai_api_version = config["OPENAI_API_VERSION"]
-openai_api_type = config["OPENAI_API_TYPE"]
-openai_api_model_name = config["OPENAI_API_MODEL_NAME"]
-deployment_name = config["OPENAI_API_DEPLOYMENT_ID"]
-model_name = config["OPENAI_API_EMBEDDING_MODEL_NAME"]
-temperature = config["OPENAI_API_TEMPERATURE"]
+# gets the API Key from environment variable AZURE_OPENAI_API_KEY
+client = AzureOpenAI(
+    api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+    api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+    # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#rest-api-versioning
+    # https://learn.microsoft.com/en-us/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal#create-a-resource
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+    azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
+)
 
-# Debug prints
-print(f"openai_api_base: {openai_api_base}")
-print(f"openai_api_version: {openai_api_version}")
-print(f"openai_api_type: {openai_api_type}")
-print(f"deployment_name: {deployment_name}")
-print(f"model_name: {model_name}")
-print(f"temperature: {temperature}")
+try:
 
-# Define the headers. Notice the difference between OpenAI's original API
-headers = {
-    "api-key": f"{openai_api_key}",
-    "Content-Type": "application/json"
-}
+    completion = client.chat.completions.create(
+        model="gpt-4",
+        messages=[
+            {
+                "role": "user",
+                "content": "How do I output all files in a directory using Python?",
+            },
+        ],
+    )
+    print(completion.choices[0].message.content)
+except openai.APIConnectionError as e:
+    print("The server could not be reached")
+    print(e.__cause__)  # an underlying Exception, likely raised within httpx.
+except openai.RateLimitError as e:
+    print("A 429 status code was received; we should back off a bit.")
+except openai.APIStatusError as e:
+    print("Another non-200-range status code was received")
+    print(e.status_code)
+    print(e.response)
 
-# Define the payload (your prompt and other settings)
-payload = {
-    "messages": [{"role": "user", "content": "Translate the following English text to French: 'Hello, World!'"}],
-    "max_tokens": 8000,
-    "model": f"{openai_api_model_name}",
-    "temperature": float(f"{temperature}")
-}
-
-# Make the API request
-url = openai_api_base + "openai/deployments/" + deployment_name + "/chat/completions?api-version=" + openai_api_version
-print(f"url: {url}")
-response = requests.post(url, headers=headers, json=payload)
-
-# Parse the response, notice that completions have a "role"
-if response.status_code == 200:
-    full_response = response.json()
-    print(f"Completion: {full_response['choices'][0]['message']}")
-else:
-    print(f"Error: {response.status_code}, {response.text}")

@@ -13,8 +13,8 @@ client = AzureOpenAI(
     api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
     # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#rest-api-versioning
     # https://learn.microsoft.com/en-us/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal#create-a-resource
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
-    # azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+    azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
 )
 
 try:
@@ -44,4 +44,3 @@ except openai.APIStatusError as e:
     print(e.response)
 except Exception as e:
     print(e)
-

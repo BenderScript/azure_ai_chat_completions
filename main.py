@@ -6,14 +6,15 @@ from openai import AzureOpenAI, AuthenticationError
 
 load_dotenv()
 
+
 # gets the API Key from environment variable AZURE_OPENAI_API_KEY
 client = AzureOpenAI(
     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
     api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
     # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#rest-api-versioning
     # https://learn.microsoft.com/en-us/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal#create-a-resource
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-    azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+    # azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
 )
 
 try:

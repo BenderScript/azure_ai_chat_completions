@@ -1,32 +1,38 @@
+# Structured Output Test
 import os
 import openai
 from dotenv import load_dotenv
 from openai import AzureOpenAI, AuthenticationError
+from pydantic import BaseModel
 
 load_dotenv()
 
 
-# gets the API Key from environment variable AZURE_OPENAI_API_KEY
+class CalendarEvent(BaseModel):
+    name: str
+    date: str
+    participants: list[str]
+
+
 client = AzureOpenAI(
     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
     api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
-    # https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#rest-api-versioning
-    # https://learn.microsoft.com/en-us/azure/cognitive-services/openai/how-to/create-resource?pivots=web-portal#create-a-resource
     azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+    # azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT")
 )
 
 try:
-
-    completion = client.chat.completions.create(
+    completion = client.beta.chat.completions.parse(
         model=os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4o"),
         messages=[
-            {
-                "role": "user",
-                "content": "How do I output all files in a directory using Python?",
-            },
+            {"role": "system", "content": "Extract the event information."},
+            {"role": "user", "content": "Alice and Bob are going to a science fair on Friday."},
         ],
+        response_format=CalendarEvent,
     )
-    print(completion.choices[0].message.content)
+    event = completion.choices[0].message.parsed
+    print(event)
+    print(completion.model_dump_json(indent=2))
 except AuthenticationError as e:
     print(e)
     print(e.status_code)

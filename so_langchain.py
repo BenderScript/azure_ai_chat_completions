@@ -2,6 +2,9 @@ import os
 from langchain_openai import AzureChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class CalendarEvent(BaseModel):
